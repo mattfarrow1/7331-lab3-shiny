@@ -1,22 +1,22 @@
 library(shiny)
+library(shinythemes)
+library(shinydashboard)
 library(arules)
 library(arulesViz)
 library(dplyr)
+library(tidyr)
 library(visNetwork)
 library(igraph)
 
-#data(lab3)
-load(here::here("data", "lab3.Rdata"))
-
-# Convert everything to a factor
-df <- df2 %>%
-  mutate_if(is.ordered, as.factor)
+# Load data
+load("lab3.Rdata")
 
 function(input, output) {
   rules <- reactive({
-    variables <- tibble(variable = colnames(df))
     
-    #ds <- dataset[, variables$variable]
+    variables <- df_names
+    
+    #ds <- df[, variables$variable]
     
     tr <- as(df, 'transactions')
     
@@ -42,7 +42,7 @@ function(input, output) {
     
     if (!is.null(input$rhs)) {
       colsR <- variables %>%
-        filter(category %in% input$rhs) %>%
+        filter(variable %in% input$rhs) %>%
         select(variable)
       colsR <- colsR$variable
     }

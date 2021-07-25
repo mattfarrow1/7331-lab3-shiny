@@ -2,6 +2,9 @@ library(shiny)
 library(shinythemes)
 library(shinydashboard)
 
+# Load data
+load("lab3.Rdata")
+
 header <- dashboardHeader(title = "Lab 3",
                           disable = TRUE)
 
@@ -28,7 +31,7 @@ body <- dashboardBody(fluidRow(column(
       "Support:",
       min = 0,
       max = 1,
-      value = 0.001 ,
+      value = 0.01 ,
       step = 1 / 10000
     ),
     br(),
@@ -50,19 +53,19 @@ body <- dashboardBody(fluidRow(column(
     br(),
     numericInput("minL", "Min. items per set:", 2),
     br(),
-    numericInput("maxL", "Max. items per set::", 3),
+    numericInput("maxL", "Max. items per set:", 3),
     br(),
     selectizeInput(
       'lhs',
       'LHS',
-      choices = colnames(df),
+      choices = unique(df_names$variable),
       multiple = TRUE,
       options = list()
     ),
     selectizeInput(
       'rhs',
       'RHS',
-      choices = colnames(df),
+      choices = unique(df_names$variable),
       multiple = TRUE,
       options = list()
     ),
