@@ -11,15 +11,39 @@ library(igraph)
 # Load data
 load("lab3.Rdata")
 
-function(input, output) {
+function(input, output, session) {
   rules <- reactive({
+    # Create a list of variables from the checkboxes
+    variables <- df_names %>%
+      filter(variable %in% input$chosen)
     
-    variables <- df_names
+    # Create a filtered LHS list based on the check boxes
+    observe({
+      x <- input$chosen
+      if (is.null(x))
+        x <- character(0)
+      updateSelectizeInput(session,
+                           "lhs",
+                           choices = x)
+    })
     
-    #ds <- df[, variables$variable]
+    # Create a filtered RHS list based on the check boxes
+    observe({
+      y <- input$chosen
+      if (is.null(y))
+        y <- character(0)
+      updateSelectizeInput(session,
+                           "rhs",
+                           choices = y)
+    })
     
-    tr <- as(df, 'transactions')
+    # Create a subset of the data using the variables chosen with the check boxes
+    ds <- df[, variables$variable]
     
+    # Convert data to transactions
+    tr <- as(ds, 'transactions')
+    
+    # Run rules based on input choices
     arAll <- apriori(
       tr,
       parameter = list(

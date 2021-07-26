@@ -55,6 +55,10 @@ body <- dashboardBody(fluidRow(column(
     br(),
     numericInput("maxL", "Max. items per set:", 3),
     br(),
+    checkboxGroupInput("chosen",
+                       "Features to Use:",
+                       choices = unique(df_names$variable),
+                       selected = unique(df_names$variable)),
     selectizeInput(
       'lhs',
       'LHS',
@@ -69,6 +73,7 @@ body <- dashboardBody(fluidRow(column(
       multiple = TRUE,
       options = list()
     ),
+    br(),
     downloadButton('downloadData', 'Download Rules as CSV')
   )
 ),
